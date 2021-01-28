@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <title>QUIZ</title>
+        <style>
+            #myProgress {
+              width: 100%;
+              height: 30px;
+              background-color: #4CAF50;
+              display: none;
+            }
+            
+            #myBar {
+              background-color: #ddd;
+              width: 1px;
+              height: 30px;
+              position: relative;
+              display: none;
+            }
+        </style>
+        
+    </head>
+    <body class="container">
+            <script src="js/index.js"> </script> 
+        <div>
+            <h1 class=" row justify-content-center" style="font-size: 60px; font-family:poppins;">TheMathQuiz</h1>
+            <p class="row" id="q"></p>
+            <div class="justify-content-center" id="myProgress">
+                <div class="justify-content-center" id="myBar"></div>
+            </div>
+            <center>
+                <br>
+                <h3 class="row justify-content-center" id="q1" style="display:none;">Answer the question below</h3><br>
+                <h5 class="row justify-content-center" id="question"></h5>
+            
+                <input class="row justify-content-center" id="answer" type="text" placeholder="Your answer here" style="display:none;" ><br><br>
+                <button class=" btn-md btn-success" id="start" onclick="test(); myFunction();" >START THE QUIZ</button><br>
+                <button class=" btn-md btn-info" id="go" onclick="check()" style="display:none;" >Submit</button><br>
+                <button class=" btn-md btn-warning" id="go1" onclick="test()" style="display:none;" >Next</button><br>
+                <button class=" btn-md btn-danger" onclick="quit()">Quit</button><br>
+           
+                <h5 class=" justify-content-center row" id="ans"></h5>
+                <h4 class="justify-content-center row" id="result"></h4>
+                
+                <img id="happy" src="img/H.jpg" style="display:none;width: 20%; height: 20%;">
+                <img id="sad" src="img/S.jpg" style="display:none;width: 20%; height: 20%;">
+            </center>
+        </div>
+        <script>
+        var max=4;
+var min=1;
+var id1;
+var arr=[];
+arr[0]='art';
+arr[1]='arte';
+console.log(typeof(arr.length));
+//alert(ran);
+var a,b,x,y,ryt_answer, ur_answer,op, score=0, count=0;
+function test()
+{
+    document.getElementById('go').style.display='none';
+    document.getElementById('happy').style.display='none';
+    document.getElementById('sad').style.display='none';
+    document.getElementById('start').style.display='none';
+    document.getElementById('answer').style.display='block';
+    document.getElementById('go').style.display='block';
+    document.getElementById('q1').style.display='block';
+
+    x =10*(Math.random());
+    y =10*(Math.random());
+    a= parseFloat(x).toFixed(1);
+    b= parseFloat(y).toFixed(1);
+    var random_operator = Math.floor(Math.random() * (max - min + 1)) + min;
+    switch(random_operator)
+    {
+        case 1: op='+';break;
+        case 2: op='-';break;
+        case 3: op='/';break;
+        case 4: op='*';break;
+    }
+    new_Quest="What is "+a+op+b+" ?"
+    document.getElementById('question').innerHTML=new_Quest;
+    
+    //console.log("in the function test, random choice is: "+random_operator+" operator is "+op);
+}
+
+function check()
+{
+    count=count+1;
+    //alert(count);
+    document.getElementById('go').style.display='none';
+    ur_answer= parseFloat(document.getElementById('answer').value);
+    //console.log('ur_answer: '+ ur_answer);
+    ryt_answer = parseFloat(eval(a+op+b)).toFixed(2);
+    //console.log(' ryt_answer: '+ ryt_answer);
+
+    if (ur_answer=='none')
+    {
+
+        document.getElementById('ans').innerHTML="Awaiting your answer";
+
+    }
+    else
+    {
+        if(ryt_answer==ur_answer)
+        {
+            score=score+1;
+            //alert(score);
+            document.getElementById('ans').innerHTML="Correct!"
+            document.getElementById('go1').style.display='block';
+            document.getElementById('happy').style.display='block';
+        }
+        else
+        {
+            document.getElementById('ans').innerHTML="Oopz!"
+            document.getElementById('sad').style.display='block';
+            document.getElementById('go1').style.display='block';
+
+        }
+
+    }
+        
+}
+
+function quit()
+{
+    //clearInterval(id1);
+    var exit = confirm("Are you sure?");
+    if(exit==true){
+        document.getElementById('q').style.display='none';
+        clearInterval(id1);
+        document.write(" Thank you!"); 
+    }
+    //localStorage.setItem('score', score);
+    //localStorage.setItem('count',count);
+    //window.location.href='page3.html';
+    //console.log('stored the result, redirecting!');
+    /*document.getElementById('ans').innerHTML= ;
+    document.getElementById('happy').style.display='none';
+    document.getElementById('sad').style.display='none';
+    document.getElementById('go1').style.display='none';
+    document.getElementById('go1').style.display='none';
+    document.getElementById('q1').style.display='none';
+    document.getElementById('answer').style.display='none';
+    document.getElementById('question').style.display='none';
+    //alert('Congrats!');
+    document.getElementById('start').style.display='block';
+    document.getElementById('myProgress').style.display='none';
+    document.getElementById('myBar').style.display='none';*/
+}
+
+function myFunction()
+    {
+        
+        var sec=60;
+        var width=0;
+        var elem = document.getElementById("myBar");
+        id1= setInterval(delay1, 1000);
+        document.getElementById('myProgress').style.display='block';
+        document.getElementById('myBar').style.display='block';
+        function delay1(){
+            if (sec<0)
+            {
+                clearInterval(id1);
+                alert("Time up!")
+                quit();
+            }
+            else
+            {
+                document.getElementById('q').innerHTML="The Time Left: "+sec+" seconds";
+                console.log("sec value is "+sec);
+                sec--;
+                width=width+(100/61);
+                elem.style.width = width + '%';
+            }
+        }
+        
+    }
+
+    function bee()
+    {
+        var num= localStorage.getItem('score');
+        var denom= localStorage.getItem('count');
+        var player = localStorage.getItem('playername');
+        document.getElementById('result').value=player+" scored "+num+"/"+denom;
+    }</script>
+    </body>
+</html>
