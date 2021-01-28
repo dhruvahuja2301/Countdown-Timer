@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>        <title>Countdown Timer</title>
+    </head>
+    <body>
+        <header class="jumbotron">
+            <h2 class="text-center">Countdown Timer</h2>
+        </header>
+        <div class="container text-white">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="form-group">
+                        <label for="hr">Enter Hours:</label><br>
+                        <input type="number" class="form-control" id="hr" value="0" min="0"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="min">Enter Minutes:</label><br>
+                        <input type="number" class="form-control" id="min" value="0" min="0"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="sec">Enter Seconds:</label><br>
+                        <input type="number" class="form-control" id="sec" value="0" min="0"><br>
+                    </div>
+                    <br>
+                    <div>
+                        <button onclick="start()" id="start">START</button>
+                        <button onclick="stop()" id="stop">STOP</button><br>
+                        <button onclick="pause()" id="pause">PAUSE</button>
+                        <button onclick="resume()" id="resume">RESUME</button>
+                    </div>
+                </div>
+
+            </div>
+    
+            <div class="pb-3 col-md-10 offset-md-1">
+                <p>Timer Bar</p>
+                <div id="outline" style="width: 100%; height: 20px; background-color:black; ">
+                    <div id="bar1" style="background-color:blue;height: 20px;width: 0%;"></div>
+                </div>
+                <p id="head1"></p>
+            </div>
+        </div>
+        
+        <script>
+            let id1, min, sec, hours, op1='*', op2='+', width1=0, sec1=0, left, ptime;
+            document.getElementById("start").style.display='block';
+            document.getElementById("stop").style.display='none';
+            document.getElementById("pause").style.display='none';
+            document.getElementById("resume").style.display='none';
+            function countdownStart(){
+                if(sec === 0) {
+                    document.getElementById('bar1').style.width = 100+'%';                
+                    document.getElementById('head1').innerHTML=  "time left is 0 seconds"
+                }
+                id1=setInterval(frame,1000);
+                function frame() {
+                    if(sec1>=sec) {
+                        clearInterval(id1);
+                        console.log("reached");
+                        document.getElementById('bar1').style.width = 100+'%';
+                        alert("times up!!");
+                        stop();
+                    }
+                    else {
+                        width1+=100/sec;
+                        sec1++;
+                        left=sec-sec1;
+                        document.getElementById('head1').innerHTML=  "time left is "+left+" seconds"
+                        // console.log("time left is "+left+" seconds");
+                        document.getElementById('bar1').style.width=width1+'%';
+                    }
+                }
+            }
+            function start() {
+                document.getElementById("start").style.display='none';
+                document.getElementById("stop").style.display='block';
+                document.getElementById("pause").style.display='block';
+                sec=document.getElementById('sec').value;
+                min=document.getElementById('min').value;
+                hours=document.getElementById('hr').value;
+                let x=eval(60+op1+hours); // eval function evaluates as (60*hours)
+                min=eval(min+op2+x);
+                let y=eval(60+op1+min);
+                sec=eval(sec+op2+y); // total time in seconds
+                countdownStart();
+            }
+            function stop() {
+                document.getElementById("start").style.display='block';
+                document.getElementById("stop").style.display='none';
+                document.getElementById("pause").style.display='none';
+                clearInterval(id1);
+                console.log("stopped");
+                sec = min = hours = document.getElementById('bar1').style.width = width1 = sec1 = 0;
+                document.getElementById('head1').innerHTML=  "";
+                alert("process terminated!!");
+            }
+            function pause() {
+                document.getElementById("stop").style.display='none';
+                document.getElementById("pause").style.display='none';
+                document.getElementById("resume").style.display='block';
+                // ptime=sec1;
+                clearInterval(id1);
+                console.log("paused");
+                document.getElementById('bar1').style.width=width1;
+                alert("timer paused!!");
+            }
+            function resume() {
+                document.getElementById("stop").style.display='block';
+                document.getElementById("pause").style.display='block';
+                document.getElementById("resume").style.display='none';
+                // sec1=ptime;
+                countdownStart();
+                document.getElementById('head1').innerHTML=  "time left is "+left+" seconds"
+                // console.log("time left is "+left+" seconds");
+                document.getElementById('bar1').style.width=width1+'%';
+            }
+        </script>
+        <style>
+            body{
+                background-image:url(background.jpg);
+                background-repeat: no-repeat;
+                background-size: cover;
+                font-family: 'Times New Roman', Times, serif;
+                font-style: italic;
+            }
+            
+        </style>
+    </body>
+</html>
